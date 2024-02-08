@@ -1,0 +1,10 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.img-fluid {
+  width: 100%;
+}
