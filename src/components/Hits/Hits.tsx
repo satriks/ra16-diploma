@@ -8,13 +8,13 @@ type Props = {};
 
 export default function Hits({}: Props) {
   const dispatch = useAppDispatch();
-  const isLoader = useAppSelector((state) => state.topSalesLoading);
+  const isLoading = useAppSelector((state) => state.loading);
   const hits = useAppSelector((state) => state.topSales);
 
   useEffect(() => {
     dispatch(getTopSales());
   }, []);
-  if (isLoader)
+  if (isLoading.topSales)
     return (
       <section className="top-sales">
         <h2 className="text-center">Хиты продаж!</h2>

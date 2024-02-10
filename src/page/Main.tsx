@@ -1,8 +1,6 @@
 import Banner from "../components/Banner";
-import CatalogMain from "../components/assets/Catalog/CatalogMain";
-
+import CatalogMain from "../components/Catalog/CatalogMain";
 import Hits from "../components/Hits/Hits";
-import Catalog from "./Catalog";
 
 export default function Main() {
   return (

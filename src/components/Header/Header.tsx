@@ -1,25 +1,15 @@
 import { useRef } from "react";
 import logo from "./header-logo.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../models/hook";
+import { getSearchItems, setSearch } from "../../redux/StoreSlice";
 
 type Props = {};
 
 export default function Header({}: Props) {
   const searchForm = useRef<HTMLFormElement>(null);
-  //   const searchEl = useRef(null);
-  //   const searchFormEl = useRef(null);
-  //   // const searchEl = document.querySelector("[data-id=search-expander]");
-  //   // const searchFormEl = document.querySelector("[data-id=search-form]");
-  //   console.log(searchEl);
-
-  //   if (searchEl.current != null) {
-  //     searchEl.current.addEventListener("click", () => {
-  //       console.log(42);
-
-  //       searchFormEl.current.classList.toggle("invisible");
-  //       searchFormEl.current.querySelector("input").focus();
-  //     });
-  //   }
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   return (
     <header className="container">
@@ -59,6 +49,16 @@ export default function Header({}: Props) {
                     className="header-controls-pic header-controls-search"
                     onClick={() => {
                       if (searchForm.current) {
+                        const text = (searchForm.current as HTMLFormElement)
+                          .querySelector("input")
+                          ?.value.trim();
+                        if (text) {
+                          dispatch(setSearch(text));
+                          dispatch(getSearchItems(text));
+                          searchForm.current.reset();
+                          navigate("/catalog");
+                          return;
+                        }
                         (
                           searchForm.current as HTMLFormElement
                         ).classList.toggle("invisible");
@@ -68,7 +68,6 @@ export default function Header({}: Props) {
                       }
                     }}
                   ></div>
-                  {/* <!-- Do programmatic navigation on click to /cart.html --> */}
                   <NavLink to="/cart">
                     <div className="header-controls-pic header-controls-cart">
                       <div className="header-controls-cart-full">1</div>
@@ -80,6 +79,9 @@ export default function Header({}: Props) {
                   data-id="search-form"
                   className="header-controls-search-form form-inline invisible"
                   ref={searchForm}
+                  onSubmit={(evt) => {
+                    evt.preventDefault();
+                  }}
                 >
                   <input className="form-control" placeholder="Поиск" />
                 </form>

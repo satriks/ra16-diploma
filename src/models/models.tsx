@@ -1,5 +1,5 @@
 export interface DataItem {
-  id: string;
+  id: number;
   category: string;
   title: string;
   price: string;
@@ -7,6 +7,6 @@ export interface DataItem {
 }
 
 export interface Category {
-  id: string;
+  id: number;
   title: string;
 }

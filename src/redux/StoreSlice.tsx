@@ -4,10 +4,16 @@ import { DataItem, Category } from "../models/models";
 interface InitialState {
   topSales: DataItem[];
   categories: Category[];
+  activeCategoryId: number;
   categoryItems: DataItem[];
+  searchText: string;
   error: string | null;
-  topSalesLoading: boolean;
-  loading: boolean;
+  loading: {
+    topSales: boolean;
+    category: boolean;
+    categoryItem: boolean;
+    moreItem: boolean;
+  };
   end: boolean;
 }
 
@@ -15,9 +21,15 @@ const initialState: InitialState = {
   topSales: [],
   categories: [],
   categoryItems: [],
+  activeCategoryId: 0,
+  searchText: "",
   error: "",
-  loading: true,
-  topSalesLoading: true,
+  loading: {
+    topSales: true,
+    category: true,
+    categoryItem: true,
+    moreItem: false,
+  },
   end: false,
 };
 
@@ -26,49 +38,82 @@ const StoreSlice = createSlice({
   initialState,
   reducers: {
     getTopSalesSuccess(state, action: PayloadAction<DataItem[]>) {
-      state.topSalesLoading = false;
+      state.loading.topSales = false;
       state.topSales = action.payload;
       state.error = null;
     },
     getCategoriesSuccess(state, action: PayloadAction<Category[]>) {
-      state.loading = false;
-      state.categories = [{ title: "Все", id: "0" }, ...action.payload];
+      state.loading.category = false;
+      state.categories = [{ title: "Все", id: 0 }, ...action.payload];
+      state.error = null;
+    },
+    getCategoryItemsSuccess(state, action: PayloadAction<DataItem[]>) {
+      state.loading.categoryItem = false;
+      state.categoryItems = action.payload;
       state.error = null;
     },
     getItemFailed(state, action: PayloadAction<string>) {
       state.error = action.payload;
     },
     getItemLoading(state) {
-      state.loading = true;
+      state.loading.categoryItem = true;
+      state.error = null;
+      state.end = false;
+    },
+    getMoreItemLoading(state) {
+      state.loading.moreItem = true;
       state.error = null;
     },
     getTopSaleLoading(state) {
-      state.topSalesLoading = true;
+      state.loading.topSales = true;
+      state.error = null;
+    },
+    getCategoryLoading(state) {
+      state.loading.category = true;
       state.error = null;
     },
     addMoreItems(state, action: PayloadAction<DataItem[]>) {
       state.categoryItems.push(...action.payload);
-      state.loading = false;
+      state.loading.moreItem = false;
       state.error = null;
     },
-    getPostEnd(state) {
+    setPostEnd(state) {
       state.end = true;
+    },
+    setCategory(state, action: PayloadAction<number>) {
+      state.activeCategoryId = action.payload;
+    },
+
+    setSearch(state, action: PayloadAction<string>) {
+      state.searchText = action.payload;
     },
   },
 });
 
 export const GET_TOP_SALES = "store/getTopSales";
 export const getTopSales = createAction(GET_TOP_SALES);
+export const GET_CATEGORY = "store/getCategory";
+export const getCategory = createAction(GET_CATEGORY);
+export const GET_ITEMS = "store/getItems";
+export const getItem = createAction<string>(GET_ITEMS);
 export const GET_MORE_ITEMS = "store/getMoreItems";
-export const getMoreItems = createAction<string>(GET_MORE_ITEMS);
+export const getMoreItems = createAction<number>(GET_MORE_ITEMS);
+export const GET_SEARCH = "store/getSearchItems";
+export const getSearchItems = createAction<string>(GET_SEARCH);
 
 export const {
   getTopSalesSuccess,
   getCategoriesSuccess,
+  getCategoryItemsSuccess,
   getItemFailed,
   getItemLoading,
-  getPostEnd,
+  setPostEnd,
   getTopSaleLoading,
+  getCategoryLoading,
+  getMoreItemLoading,
+  setCategory,
+  addMoreItems,
+  setSearch,
 } = StoreSlice.actions;
 
 export default StoreSlice.reducer;

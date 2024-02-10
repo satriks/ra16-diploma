@@ -1,5 +1,4 @@
 import Banner from "../components/Banner";
-import banner from "./assets/banner.jpg";
 
 type Props = {};
 

@@ -9,6 +9,7 @@ import About from "./page/About";
 import Product from "./page/Product";
 import Cart from "./page/Cart";
 import Contacts from "./page/Contacts";
+import ErrorPage from "./page/ErrorPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/catalog/:id" element={<Product />} />
         <Route path="/contacts" element={<Contacts />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

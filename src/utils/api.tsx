@@ -12,14 +12,12 @@ export const getCategoriesApi = () => {
   return connect.get("/categories").then((response) => response.data);
 };
 
-export const getItemCategoryApi = (id: string = "") => {
+export const getItemCategoryApi = (
+  id: string | number = 0,
+  offset: number = 0,
+  q: string = ""
+) => {
   return connect
-    .get("/items", { params: { categoryId: id } })
-    .then((response) => response.data);
-};
-
-export const getMoreItemCategoryApi = (id: string = "") => {
-  return connect
-    .get("/items", { params: { categoryId: id, offset: 6 } })
+    .get("/items", { params: { categoryId: id, offset, q } })
     .then((response) => response.data);
 };
