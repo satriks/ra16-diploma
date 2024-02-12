@@ -1,6 +1,6 @@
 import banner from "./assets/banner.jpg";
 
-export default function Banner({}: Props) {
+export default function Banner() {
   return (
     <div className="banner">
       <img src={banner} className="img-fluid" alt="К весне готовы!" />

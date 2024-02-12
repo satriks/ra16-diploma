@@ -1,19 +1,35 @@
 import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DataItem, Category } from "../models/models";
+import {
+  DataItem,
+  Category,
+  ItemDetail,
+  CartItemModel,
+  OrderModel,
+} from "../models/models";
 
 interface InitialState {
   topSales: DataItem[];
   categories: Category[];
   activeCategoryId: number;
   categoryItems: DataItem[];
+  currentProduct: ItemDetail | null;
   searchText: string;
-  error: string | null;
+  error: {
+    topSales: string | null;
+    moreItem: string | null;
+    other: string | null;
+    categories: string | null;
+  };
   loading: {
     topSales: boolean;
-    category: boolean;
+    categories: boolean;
     categoryItem: boolean;
     moreItem: boolean;
+    itemDetail: boolean;
+    order: boolean;
   };
+  cart: CartItemModel[];
+  orderSuccess: boolean;
   end: boolean;
 }
 
@@ -21,15 +37,25 @@ const initialState: InitialState = {
   topSales: [],
   categories: [],
   categoryItems: [],
+  currentProduct: null,
   activeCategoryId: 0,
   searchText: "",
-  error: "",
+  error: {
+    topSales: null,
+    moreItem: null,
+    other: null,
+    categories: null,
+  },
   loading: {
     topSales: true,
-    category: true,
+    categories: true,
     categoryItem: true,
     moreItem: false,
+    itemDetail: false,
+    order: false,
   },
+  cart: [],
+  orderSuccess: false,
   end: false,
 };
 
@@ -37,45 +63,78 @@ const StoreSlice = createSlice({
   name: "store",
   initialState,
   reducers: {
+    clearOrderSuccess(state) {
+      state.orderSuccess = false;
+    },
+    getOrderSuccess(state) {
+      state.loading.order = false;
+      state.orderSuccess = true;
+      state.error.other = null;
+      state.cart = [];
+      localStorage.removeItem("cart");
+    },
     getTopSalesSuccess(state, action: PayloadAction<DataItem[]>) {
       state.loading.topSales = false;
       state.topSales = action.payload;
-      state.error = null;
+      state.error.topSales = null;
     },
     getCategoriesSuccess(state, action: PayloadAction<Category[]>) {
-      state.loading.category = false;
+      state.loading.categories = false;
       state.categories = [{ title: "Все", id: 0 }, ...action.payload];
-      state.error = null;
+      state.error.categories = null;
     },
     getCategoryItemsSuccess(state, action: PayloadAction<DataItem[]>) {
       state.loading.categoryItem = false;
       state.categoryItems = action.payload;
-      state.error = null;
+      state.error.other = null;
+    },
+    getItemDetailSuccess(state, action: PayloadAction<ItemDetail>) {
+      state.loading.itemDetail = false;
+      state.currentProduct = action.payload;
+      state.error.other = null;
+    },
+    getTopSalesFailed(state, action: PayloadAction<string>) {
+      state.error.topSales = action.payload;
+    },
+    getMoreItemsFailed(state, action: PayloadAction<string>) {
+      state.error.moreItem = action.payload;
+    },
+    getCategoriesFailed(state, action: PayloadAction<string>) {
+      state.error.categories = action.payload;
     },
     getItemFailed(state, action: PayloadAction<string>) {
-      state.error = action.payload;
+      state.error.other = action.payload;
     },
     getItemLoading(state) {
       state.loading.categoryItem = true;
-      state.error = null;
+      state.error.other = null;
       state.end = false;
     },
     getMoreItemLoading(state) {
       state.loading.moreItem = true;
-      state.error = null;
+      state.error.moreItem = null;
     },
     getTopSaleLoading(state) {
       state.loading.topSales = true;
-      state.error = null;
+      state.error.topSales = null;
     },
-    getCategoryLoading(state) {
-      state.loading.category = true;
-      state.error = null;
+    getCategoriesLoading(state) {
+      state.loading.categories = true;
+      state.error.other = null;
+      state.categories = [];
+    },
+    getDetailLoading(state) {
+      state.loading.itemDetail = true;
+      state.error.other = null;
+    },
+    getOrderLoading(state) {
+      state.loading.order = true;
+      state.error.other = null;
     },
     addMoreItems(state, action: PayloadAction<DataItem[]>) {
       state.categoryItems.push(...action.payload);
       state.loading.moreItem = false;
-      state.error = null;
+      state.error.moreItem = null;
     },
     setPostEnd(state) {
       state.end = true;
@@ -86,6 +145,41 @@ const StoreSlice = createSlice({
 
     setSearch(state, action: PayloadAction<string>) {
       state.searchText = action.payload;
+    },
+    addCart(state, action: PayloadAction<CartItemModel>) {
+      const item = state.cart.find(
+        (el) => el.id === action.payload.id && el.size === action.payload.size
+      );
+      if (item) {
+        const count = item.count;
+        state.cart = state.cart.filter(
+          (el) =>
+            !(el.id === action.payload.id && el.size === action.payload.size)
+        );
+        action.payload.count += count;
+      }
+      state.cart.push(action.payload);
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    },
+    delCart(state, action: PayloadAction<CartItemModel>) {
+      state.cart = state.cart.filter((el) => {
+        return !(
+          el.id === action.payload.id && el.size === action.payload.size
+        );
+      });
+
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    },
+    changeCart(state, action: PayloadAction<CartItemModel>) {
+      state.cart = state.cart.filter((el) => el.id != action.payload.id);
+      state.cart.push(action.payload);
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    },
+    updateCart(state) {
+      const data = localStorage.getItem("cart");
+      if (data) {
+        state.cart = JSON.parse(data);
+      }
     },
   },
 });
@@ -100,20 +194,36 @@ export const GET_MORE_ITEMS = "store/getMoreItems";
 export const getMoreItems = createAction<number>(GET_MORE_ITEMS);
 export const GET_SEARCH = "store/getSearchItems";
 export const getSearchItems = createAction<string>(GET_SEARCH);
+export const GET_ITEM_DETAIL = "store/getItemDetail";
+export const getItemDetail = createAction<string | number>(GET_ITEM_DETAIL);
+export const GET_ORDER = "store/getOrder";
+export const getOrder = createAction<OrderModel>(GET_ORDER);
 
 export const {
   getTopSalesSuccess,
   getCategoriesSuccess,
   getCategoryItemsSuccess,
+  getItemDetailSuccess,
+  getOrderSuccess,
   getItemFailed,
+  getTopSalesFailed,
+  getMoreItemsFailed,
+  getCategoriesFailed,
   getItemLoading,
-  setPostEnd,
   getTopSaleLoading,
-  getCategoryLoading,
+  getCategoriesLoading,
   getMoreItemLoading,
+  getDetailLoading,
+  getOrderLoading,
+  setPostEnd,
   setCategory,
   addMoreItems,
   setSearch,
+  addCart,
+  delCart,
+  changeCart,
+  updateCart,
+  clearOrderSuccess,
 } = StoreSlice.actions;
 
 export default StoreSlice.reducer;

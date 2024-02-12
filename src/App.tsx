@@ -10,8 +10,17 @@ import Product from "./page/Product";
 import Cart from "./page/Cart";
 import Contacts from "./page/Contacts";
 import ErrorPage from "./page/ErrorPage";
+import { useAppDispatch } from "./models/hook";
+import { useEffect } from "react";
+import { updateCart } from "./redux/StoreSlice";
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(updateCart());
+  }, []);
+
   return (
     <BrowserRouter>
       <Header />

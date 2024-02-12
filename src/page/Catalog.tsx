@@ -4,12 +4,13 @@ import CatalogBody from "../components/Catalog/CatalogComponents/CatalogBody";
 import CatalogSearch from "../components/Catalog/CatalogComponents/CatalogSearch";
 import Banner from "../components/Banner";
 import { useEffect } from "react";
-import { useAppDispatch } from "../models/hook";
+import { useAppDispatch, useAppSelector } from "../models/hook";
 import { getCategory, getItem } from "../redux/StoreSlice";
 
 type Props = {};
 
 export default function Catalog({}: Props) {
+  const isLoading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getCategory());
@@ -25,7 +26,7 @@ export default function Catalog({}: Props) {
           <CatalogSearch />
           <CatalogMenu />
           <CatalogBody />
-          <CatalogAddMore />
+          {!isLoading.categoryItem && <CatalogAddMore />}
         </div>
       </div>
     </main>

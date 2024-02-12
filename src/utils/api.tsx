@@ -1,4 +1,5 @@
 import axios from "axios";
+import { OrderModel } from "../models/models";
 
 const connect = axios.create({
   baseURL: import.meta.env.VITE_HOST || "http://localhost:7070/api/",
@@ -20,4 +21,12 @@ export const getItemCategoryApi = (
   return connect
     .get("/items", { params: { categoryId: id, offset, q } })
     .then((response) => response.data);
+};
+
+export const getItemDetailApi = (id: string | number) => {
+  return connect.get(`/items/${id}`).then((response) => response.data);
+};
+
+export const getOrderApi = (order: OrderModel) => {
+  return connect.post(`/order`, order);
 };

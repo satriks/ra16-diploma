@@ -17,13 +17,13 @@ export default function CatalogMain({}: Props) {
     dispatch(getItem("0"));
   }, []);
 
-  if (isLoading.categoryItem || isLoading.category)
-    return (
-      <section className="catalog" id="catalog">
-        <h2 className="text-center">Каталог</h2>
-        <Loader />
-      </section>
-    );
+  // if (isLoading.categoryItem || isLoading.categories)
+  //   return (
+  //     <section className="catalog" id="catalog">
+  //       <h2 className="text-center">Каталог</h2>
+  //       <Loader />
+  //     </section>
+  //   );
 
   return (
     <section className="catalog">

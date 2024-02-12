@@ -3,17 +3,29 @@ import Card from "../Card/Card";
 import { useAppDispatch, useAppSelector } from "../../models/hook";
 import { getTopSales } from "../../redux/StoreSlice";
 import Loader from "../Loader";
+import ErrorInfo from "../ErrorInfo";
 
 type Props = {};
 
 export default function Hits({}: Props) {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.loading);
+  const isError = useAppSelector((state) => state.error.topSales);
   const hits = useAppSelector((state) => state.topSales);
 
   useEffect(() => {
     dispatch(getTopSales());
   }, []);
+
+  if (isError) {
+    return (
+      <section className="top-sales">
+        <h2 className="text-center">Хиты продаж!</h2>
+        <ErrorInfo text={isError} />
+      </section>
+    );
+  }
+
   if (isLoading.topSales)
     return (
       <section className="top-sales">

@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { DataItem } from "../../models/models";
 
 type Props = {
@@ -17,9 +18,12 @@ export default function Card({ item }: Props) {
           <div className="card-body">
             <p className="card-text">{item.title}</p>
             <p className="card-text">{item.price} руб.</p>
-            <a href="/products/1.html" className="btn btn-outline-primary">
+            <NavLink
+              to={`/catalog/${item.id}`}
+              className="btn btn-outline-primary"
+            >
               Заказать
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>

@@ -1,13 +1,14 @@
 import { useRef } from "react";
 import logo from "./header-logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../models/hook";
+import { useAppDispatch, useAppSelector } from "../../models/hook";
 import { getSearchItems, setSearch } from "../../redux/StoreSlice";
 
 type Props = {};
 
 export default function Header({}: Props) {
   const searchForm = useRef<HTMLFormElement>(null);
+  const cartList = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -70,7 +71,11 @@ export default function Header({}: Props) {
                   ></div>
                   <NavLink to="/cart">
                     <div className="header-controls-pic header-controls-cart">
-                      <div className="header-controls-cart-full">1</div>
+                      {cartList.length > 0 && (
+                        <div className="header-controls-cart-full">
+                          {cartList.length}
+                        </div>
+                      )}
                       <div className="header-controls-cart-menu"></div>
                     </div>
                   </NavLink>
