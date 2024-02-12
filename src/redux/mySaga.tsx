@@ -115,8 +115,6 @@ export function* getMoreItemsSaga(action: PayloadAction<string>) {
 }
 
 export function* getItemsSaga(action: PayloadAction<string>) {
-  console.log(action.payload, " get item action");
-
   yield put(getItemLoading());
   const searchText: string = yield select((state) => state.searchText);
   try {
