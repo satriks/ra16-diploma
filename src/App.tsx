@@ -19,7 +19,7 @@ function App() {
 
   useEffect(() => {
     dispatch(updateCart());
-  }, []);
+  }, [dispatch]);
 
   return (
     <BrowserRouter>

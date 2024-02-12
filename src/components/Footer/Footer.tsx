@@ -1,8 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-type Props = {};
-
-export default function Footer({}: Props) {
+export default function Footer() {
   return (
     <footer className="container bg-light footer">
       <div className="row">

@@ -1,9 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../../models/hook";
 import { getSearchItems, setSearch } from "../../../redux/StoreSlice";
 
-type Props = {};
-
-export default function CatalogSearch({}: Props) {
+export default function CatalogSearch() {
   const dispatch = useAppDispatch();
   const searchText = useAppSelector((state) => state.searchText);
 

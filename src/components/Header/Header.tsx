@@ -4,9 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../models/hook";
 import { getSearchItems, setSearch } from "../../redux/StoreSlice";
 
-type Props = {};
-
-export default function Header({}: Props) {
+export default function Header() {
   const searchForm = useRef<HTMLFormElement>(null);
   const cartList = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();

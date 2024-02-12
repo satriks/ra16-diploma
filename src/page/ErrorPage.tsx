@@ -1,8 +1,6 @@
 import Banner from "../components/Banner";
 
-type Props = {};
-
-export default function ErrorPage({}: Props) {
+export default function ErrorPage() {
   return (
     <main className="container">
       <div className="row">

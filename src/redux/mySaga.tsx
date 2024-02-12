@@ -1,3 +1,4 @@
+import { createBrowserHistory } from "history";
 import { delay, put, select, takeEvery, takeLatest } from "redux-saga/effects";
 import {
   GET_CATEGORY,
@@ -37,7 +38,9 @@ import {
   getTopSalesApi,
 } from "../utils/api";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+
+export const browserHistory = createBrowserHistory();
 
 export function* getOrderSaga(action: PayloadAction<OrderModel>) {
   yield put(getOrderLoading());
@@ -64,8 +67,13 @@ export function* getItemDetailSaga(action: PayloadAction<string | number>) {
     const payload: ItemDetail = yield getItemDetailApi(action.payload);
 
     yield put(getItemDetailSuccess(payload));
-  } catch (error) {
-    yield put(getItemFailed((error as Error).message));
+  } catch (e) {
+    const error = e as AxiosError;
+
+    if (error.response?.status === 404) {
+      browserHistory.push("/*");
+    }
+    yield put(getItemFailed((e as Error).message));
   }
 }
 

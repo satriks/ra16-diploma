@@ -4,9 +4,7 @@ import { getOrder } from "../../redux/StoreSlice";
 import Loader from "../Loader";
 import ErrorInfo from "../ErrorInfo";
 
-type Props = {};
-
-export default function CartOrder({}: Props) {
+export default function CartOrder() {
   const orderSuccess = useAppSelector((state) => state.orderSuccess);
   const dispatch = useAppDispatch();
   const orderForm = useRef<HTMLFormElement>(null);

@@ -1,9 +1,7 @@
 import { useAppSelector } from "../../models/hook";
 import CartItem from "./CartItem";
 
-type Props = {};
-
-export default function CartInfo({}: Props) {
+export default function CartInfo() {
   const cartList = useAppSelector((state) => state.cart);
 
   const sum = cartList.reduce((a, b) => a + b.count * b.price, 0);

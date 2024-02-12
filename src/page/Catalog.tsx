@@ -7,15 +7,13 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../models/hook";
 import { getCategory, getItem } from "../redux/StoreSlice";
 
-type Props = {};
-
-export default function Catalog({}: Props) {
+export default function Catalog() {
   const isLoading = useAppSelector((state) => state.loading);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getCategory());
     dispatch(getItem("0"));
-  }, []);
+  }, [dispatch]);
 
   return (
     <main className="container">

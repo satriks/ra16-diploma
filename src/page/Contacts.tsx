@@ -1,9 +1,6 @@
-import React from "react";
 import Banner from "../components/Banner";
 
-type Props = {};
-
-export default function Contacts({}: Props) {
+export default function Contacts() {
   return (
     <main className="container">
       <div className="row">

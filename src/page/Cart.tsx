@@ -2,9 +2,7 @@ import Banner from "../components/Banner";
 import CartInfo from "../components/Cart/CartInfo";
 import CartOrder from "../components/Cart/CartOrder";
 
-type Props = {};
-
-export default function Cart({}: Props) {
+export default function Cart() {
   return (
     <main className="container">
       <div className="row">

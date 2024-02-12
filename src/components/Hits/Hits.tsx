@@ -5,9 +5,7 @@ import { getTopSales } from "../../redux/StoreSlice";
 import Loader from "../Loader";
 import ErrorInfo from "../ErrorInfo";
 
-type Props = {};
-
-export default function Hits({}: Props) {
+export default function Hits() {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.loading);
   const isError = useAppSelector((state) => state.error.topSales);
@@ -15,7 +13,7 @@ export default function Hits({}: Props) {
 
   useEffect(() => {
     dispatch(getTopSales());
-  }, []);
+  }, [dispatch]);
 
   if (isError) {
     return (

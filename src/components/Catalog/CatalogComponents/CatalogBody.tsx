@@ -3,9 +3,7 @@ import { useAppSelector } from "../../../models/hook";
 import Loader from "../../Loader";
 import ErrorInfo from "../../ErrorInfo";
 
-type Props = {};
-
-export default function CatalogBody({}: Props) {
+export default function CatalogBody() {
   const items = useAppSelector((state) => state.categoryItems);
   const isLoading = useAppSelector((state) => state.loading.categoryItem);
   const isError = useAppSelector((state) => state.error.other);

@@ -6,9 +6,7 @@ import { addCart, getItemDetail } from "../redux/StoreSlice";
 import Loader from "../components/Loader";
 import ErrorInfo from "../components/ErrorInfo";
 
-type Props = {};
-
-export default function Product({}: Props) {
+export default function Product() {
   const { id } = useParams();
   const itemDetail = useAppSelector((state) => state.currentProduct);
   const isLoading = useAppSelector((state) => state.loading.itemDetail);
@@ -48,7 +46,7 @@ export default function Product({}: Props) {
     if (id) {
       dispatch(getItemDetail(id));
     }
-  }, []);
+  }, [dispatch, id]);
   if (isError) {
     return (
       <main className="container">

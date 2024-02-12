@@ -1,29 +1,17 @@
 import CatalogMenu from "./CatalogComponents/CatalogMenu";
 import CatalogAddMore from "./CatalogComponents/CatalogAddMore";
-import { useAppDispatch, useAppSelector } from "../../models/hook";
-import Loader from "../Loader";
+import { useAppDispatch } from "../../models/hook";
 import { useEffect } from "react";
 import { getCategory, getItem } from "../../redux/StoreSlice";
 import CatalogBody from "./CatalogComponents/CatalogBody";
 
-type Props = {};
-
-export default function CatalogMain({}: Props) {
-  const isLoading = useAppSelector((state) => state.loading);
+export default function CatalogMain() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getCategory());
     dispatch(getItem("0"));
-  }, []);
-
-  // if (isLoading.categoryItem || isLoading.categories)
-  //   return (
-  //     <section className="catalog" id="catalog">
-  //       <h2 className="text-center">Каталог</h2>
-  //       <Loader />
-  //     </section>
-  //   );
+  }, [dispatch]);
 
   return (
     <section className="catalog">

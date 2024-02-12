@@ -1,8 +1,6 @@
 import Banner from "../components/Banner";
 
-type Props = {};
-
-export default function About({}: Props) {
+export default function About() {
   return (
     <main className="container">
       <div className="row">
