@@ -11,7 +11,7 @@ export default function CatalogMenu() {
   return (
     <ul className="catalog-categories nav justify-content-center">
       {isLoading && !isError && <Loader />}
-      {isError && <ErrorInfo text={isError} />}
+      {isError && <ErrorInfo errorInfo={isError} />}
       {categories.map((category) => (
         <CatalogMenuItem category={category} key={category.id} />
       ))}

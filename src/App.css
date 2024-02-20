@@ -31,14 +31,23 @@
   z-index: 10;
 }
 
+/* .error-message__wrapper {
+  position: relative;
+  display: flex;
+} */
+
 .error-message {
   position: absolute;
 
-  margin-left: auto;
-  margin-right: auto;
   left: 0;
   right: 0;
   text-align: center;
+  height: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
 
   border: 1px solid black;
   background-color: whitesmoke;
@@ -46,4 +55,44 @@
   color: rgb(200, 53, 30);
   padding: 30px;
   z-index: 10;
+}
+
+.error-message > h2 {
+  margin: 0;
+}
+
+.card-text {
+  height: 35px;
+}
+
+@media (max-width: 982px) {
+  .card-text {
+    height: 45px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-text {
+    height: 80px;
+  }
+}
+
+@media (max-width: 500px) {
+  .card-text {
+    height: 100px;
+  }
+}
+
+.catalog-spaces {
+  height: 680px;
+  display: flex;
+  align-items: center;
+}
+
+.items_not_found {
+  display: flex;
+  justify-content: center;
+  background-color: #d9dfe360;
+
+  margin: 40px auto;
 }

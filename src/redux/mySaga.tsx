@@ -44,7 +44,6 @@ export const browserHistory = createBrowserHistory();
 
 export function* getOrderSaga(action: PayloadAction<OrderModel>) {
   yield put(getOrderLoading());
-  console.log(action);
 
   try {
     const response: AxiosResponse = yield getOrderApi(action.payload);
@@ -56,7 +55,9 @@ export function* getOrderSaga(action: PayloadAction<OrderModel>) {
       yield put(clearOrderSuccess());
     }
   } catch (error) {
-    yield put(getItemFailed((error as Error).message));
+    yield put(
+      getItemFailed({ message: (error as Error).message, errFunc: action })
+    );
   }
 }
 
@@ -73,7 +74,9 @@ export function* getItemDetailSaga(action: PayloadAction<string | number>) {
     if (error.response?.status === 404) {
       browserHistory.push("/*");
     }
-    yield put(getItemFailed((e as Error).message));
+    yield put(
+      getItemFailed({ message: (e as Error).message, errFunc: action })
+    );
   }
 }
 
@@ -87,11 +90,12 @@ export function* getSearchSaga(action: PayloadAction<string>) {
       0,
       action.payload
     );
-    console.log(payload);
 
     yield put(getCategoryItemsSuccess(payload));
   } catch (error) {
-    yield put(getItemFailed((error as Error).message));
+    yield put(
+      getItemFailed({ message: (error as Error).message, errFunc: action })
+    );
   }
 }
 
@@ -110,13 +114,16 @@ export function* getMoreItemsSaga(action: PayloadAction<string>) {
 
     yield put(addMoreItems(payload));
   } catch (error) {
-    yield put(getMoreItemsFailed((error as Error).message));
+    yield put(
+      getMoreItemsFailed({ message: (error as Error).message, errFunc: action })
+    );
   }
 }
 
 export function* getItemsSaga(action: PayloadAction<string>) {
   yield put(getItemLoading());
   const searchText: string = yield select((state) => state.searchText);
+
   try {
     const payload: DataItem[] = yield getItemCategoryApi(
       action.payload,
@@ -125,29 +132,37 @@ export function* getItemsSaga(action: PayloadAction<string>) {
     );
     yield put(getCategoryItemsSuccess(payload));
   } catch (error) {
-    yield put(getItemFailed((error as Error).message));
+    yield put(
+      getItemFailed({ message: (error as Error).message, errFunc: action })
+    );
   }
 }
 
-export function* getCategorySaga() {
+export function* getCategorySaga(action: PayloadAction<string>) {
   yield put(getCategoriesLoading());
 
   try {
     const payload: DataItem[] = yield getCategoriesApi();
     yield put(getCategoriesSuccess(payload));
   } catch (error) {
-    yield put(getCategoriesFailed((error as Error).message));
+    yield put(
+      getCategoriesFailed({
+        message: (error as Error).message,
+        errFunc: action,
+      })
+    );
   }
 }
 
-export function* getTopSaleSaga() {
+export function* getTopSaleSaga(action: PayloadAction<string>) {
   yield put(getTopSaleLoading());
-
   try {
     const payload: DataItem[] = yield getTopSalesApi();
     yield put(getTopSalesSuccess(payload));
   } catch (error) {
-    yield put(getTopSalesFailed((error as Error).message));
+    yield put(
+      getTopSalesFailed({ message: (error as Error).message, errFunc: action })
+    );
   }
 }
 

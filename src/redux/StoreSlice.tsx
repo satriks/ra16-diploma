@@ -7,6 +7,11 @@ import {
   OrderModel,
 } from "../models/models";
 
+interface Error {
+  message: string;
+  errFunc: PayloadAction<string | number | OrderModel>;
+}
+
 interface InitialState {
   topSales: DataItem[];
   categories: Category[];
@@ -15,10 +20,10 @@ interface InitialState {
   currentProduct: ItemDetail | null;
   searchText: string;
   error: {
-    topSales: string | null;
-    moreItem: string | null;
-    other: string | null;
-    categories: string | null;
+    topSales: Error | null;
+    moreItem: Error | null;
+    other: Error | null;
+    categories: Error | null;
   };
   loading: {
     topSales: boolean;
@@ -93,16 +98,16 @@ const StoreSlice = createSlice({
       state.currentProduct = action.payload;
       state.error.other = null;
     },
-    getTopSalesFailed(state, action: PayloadAction<string>) {
+    getTopSalesFailed(state, action: PayloadAction<Error>) {
       state.error.topSales = action.payload;
     },
-    getMoreItemsFailed(state, action: PayloadAction<string>) {
+    getMoreItemsFailed(state, action: PayloadAction<Error>) {
       state.error.moreItem = action.payload;
     },
-    getCategoriesFailed(state, action: PayloadAction<string>) {
+    getCategoriesFailed(state, action: PayloadAction<Error>) {
       state.error.categories = action.payload;
     },
-    getItemFailed(state, action: PayloadAction<string>) {
+    getItemFailed(state, action: PayloadAction<Error>) {
       state.error.other = action.payload;
     },
     getItemLoading(state) {
@@ -141,6 +146,8 @@ const StoreSlice = createSlice({
     },
     setCategory(state, action: PayloadAction<number>) {
       state.activeCategoryId = action.payload;
+      state.error.moreItem = null;
+      state.loading.moreItem = false;
     },
 
     setSearch(state, action: PayloadAction<string>) {

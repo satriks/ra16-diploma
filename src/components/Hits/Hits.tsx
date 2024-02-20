@@ -19,7 +19,7 @@ export default function Hits() {
     return (
       <section className="top-sales">
         <h2 className="text-center">Хиты продаж!</h2>
-        <ErrorInfo text={isError} />
+        <ErrorInfo errorInfo={isError} />
       </section>
     );
   }

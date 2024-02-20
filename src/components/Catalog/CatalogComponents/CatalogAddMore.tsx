@@ -9,22 +9,24 @@ export default function CatalogAddMore() {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.loading.moreItem);
   const isError = useAppSelector((state) => state.error.moreItem);
+  const items = useAppSelector((state) => state.categoryItems);
 
-  if (isError) return <ErrorInfo text={isError} />;
+  if (isError) return <ErrorInfo errorInfo={isError} />;
   if (isLoading) return <Loader />;
   if (available) return null;
-
-  return (
-    <div className="text-center">
-      {}
-      <button
-        className="btn btn-outline-primary"
-        onClick={() => {
-          dispatch(getMoreItems(currentId));
-        }}
-      >
-        Загрузить ещё
-      </button>
-    </div>
-  );
+  if (items.length > 5) {
+    return (
+      <div className="text-center">
+        {}
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => {
+            dispatch(getMoreItems(currentId));
+          }}
+        >
+          Загрузить ещё
+        </button>
+      </div>
+    );
+  }
 }

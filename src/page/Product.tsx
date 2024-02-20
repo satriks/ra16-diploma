@@ -47,32 +47,21 @@ export default function Product() {
       dispatch(getItemDetail(id));
     }
   }, [dispatch, id]);
-  if (isError) {
+  if (isError || isLoading) {
     return (
       <main className="container">
         <div className="row">
           <div className="col">
             <Banner />
-
-            <ErrorInfo text={isError} />
+            <div className="catalog-spaces">
+              {isError && <ErrorInfo errorInfo={isError} />}
+              {!isError && isLoading && <Loader />}
+            </div>
           </div>
         </div>
       </main>
     );
   }
-
-  if (isLoading)
-    return (
-      <main className="container">
-        <div className="row">
-          <div className="col">
-            <Banner />
-
-            <Loader />
-          </div>
-        </div>
-      </main>
-    );
 
   return (
     <main className="container">
